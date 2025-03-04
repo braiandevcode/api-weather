@@ -3,7 +3,7 @@ import { ContextWeatherProviderProps, IContextWeather } from '../types/types.d';
 import { useReducerWeather } from '../reducer/useReducerWeather';
 
 // CONTEXTO
-export const ContextWeather = createContext<IContextWeather | undefined>(undefined);
+export const ContextWeather = createContext<IContextWeather | null>(null);
 
 // COMPONENTE PROVIDER
 export function ContextWeatherProvider({ children }: ContextWeatherProviderProps) {
@@ -12,7 +12,8 @@ export function ContextWeatherProvider({ children }: ContextWeatherProviderProps
         state,
         setCoordinates,
         setWeather,
-        setLoading
+        setLoading,
+        setIsVisible
     } = useReducerWeather();
 
     // OBJETO TIPO "IContextWeather"
@@ -20,7 +21,8 @@ export function ContextWeatherProvider({ children }: ContextWeatherProviderProps
         state,
         setCoordinates,
         setLoading,
-        setWeather
+        setWeather,
+        setIsVisible
     };
 
     //RETORNO DE PROVIDER

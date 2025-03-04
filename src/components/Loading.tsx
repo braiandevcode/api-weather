@@ -1,9 +1,13 @@
-export function Loading (){
-    return(
+
+// LOADER
+export function Loading() {
+    return (
         <>
             <div className="container-loading">
-                <h3>Cargando...</h3>
-                <img  className='container-loading__loading' src="./src/assets/images/loader.svg" alt="Loading"/>
+                <div>
+                    <h3>Cargando...</h3>
+                </div>
+                <img className='container-loading__loading' src="./src/assets/images/loader.svg" alt="Loading" />
             </div>
         </>
     );

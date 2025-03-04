@@ -4,7 +4,7 @@ import { dataUrlIcon } from '../constants';
 import { IContextWeather } from '../types/types.d';
 
 export function IconWeather() {
-    const context = useContext(ContextWeather) as IContextWeather | undefined;
+    const context = useContext(ContextWeather) as IContextWeather |null;
     if (!context) return;
     const { icon  } = context.state;
     const ICON_WEATHER: string = dataUrlIcon({ icon });

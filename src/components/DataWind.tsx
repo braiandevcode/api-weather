@@ -2,19 +2,33 @@ import { useContext } from 'react';
 import cardinalPoints from '../helpers/cardinalPoints';
 import { ContextWeather } from '../context/ContextWeather';
 import { IContextWeather } from '../types/types.d';
+import { Col, Row, Stack } from 'react-bootstrap';
 
 export function DataWind() {
-    const context = useContext(ContextWeather) as IContextWeather | undefined;
-    if (!context) return;
+    const context = useContext(ContextWeather) as IContextWeather | null;
+    if (!context) return null;
     const { deg, gust, speed } = context.state;
     const DEG = cardinalPoints(deg);
+
+    const existeDataWind = ({ data }: { data: number | string }) => {
+        return (
+            <>
+                {!data ? <strong>Sin datos</strong> : <strong>{isNaN(Number(data)) ? data : Math.round(Number(data))}</strong>}
+            </>
+        );
+    };
+
     return (
         <>
-            <div className='sectionCountry__data-wind'>
-                <span>Viento del sector <strong>{DEG}</strong></span> -
-                <span>Ráfaga <strong>{Math.round(gust)} Km/h</strong></span> -
-                <span>Velocidad <strong>{Math.round(speed)} Km/h</strong></span>
-            </div>
+            <Row className='mb-2'>
+                <Col xs='auto'>
+                    <Stack className='sectionCountry__image-name' direction='horizontal' gap={2}>
+                        <span>Viento del sector {existeDataWind({ data: DEG })}</span> -
+                        <span>Ráfaga {existeDataWind({ data: gust })} Km/h</span> -
+                        <span>Velocidad {existeDataWind({ data: speed })} Km/h</span>
+                    </Stack>
+                </Col>
+            </Row>
         </>
     );
 }

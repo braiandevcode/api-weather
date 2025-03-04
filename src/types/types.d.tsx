@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-// PROPIEDAD LAT Y LON DE NAVIGATOR
+// PROPIEDAD LAT Y LON DE NAVIGATOR 
 export interface ICoordinates {
     latitude: number;
     longitude: number;
@@ -49,16 +49,18 @@ export interface IDataMinMax {
 };
 
 // INTERFACE GENERAL QUE COMBINA TODOS LOS TIPOS
-export interface IWeatherData extends IDataHumFeel, IWeather, ICoordinates, IWeatherMain {
+export interface IWeatherData extends IDataHumFeel, IWeather, IWeatherMain, ICoordinates {
     isLoading: boolean;
+    isVisible: boolean;
 }
 
 export type Loading = { isLoading: boolean }
 
 export type ActionApi =
-    | { type: 'SET_WEATHER', payload: IWeatherData }
-    | { type: 'SET_COORDINATES', payload: ICoordinates }
+    | { type: 'SET_WEATHER', payload: IWeatherData  }
+    | { type: 'SET_COORDINATES', payload: ICoordinates  }
     | { type: 'SET_LOADING', payload: boolean }
+    | { type: 'SET_VISIBLE', payload: boolean }
 
 
 export type Cardinals = 'Noreste' | 'Este' | 'Sureste' | 'Sur' | 'Suroeste' | 'Oeste' | 'Noroeste' | 'Norte';
@@ -81,20 +83,40 @@ export interface ContextWeatherProviderProps {
 
 // OBTENER UBIACION DEL USUARIO
 export interface IGetLocationUser{
-    setCoordinates:( { latitude, longitude}: ICoordinates)=> void, 
+    setCoordinates:( { latitude, longitude }: ICoordinates)=> void, 
     setLoading:(isLoading:boolean)=>void
 }
 
-export interface IGetWeather{
-    latitude: number, 
-    longitude: number, 
+export interface IGetWeather extends ICoordinates{ 
     setWeather: ({...state}: IWeatherData)=> void, 
-    setLoading: (isLoading:boolean)=> void
+    setLoading: (isLoading:boolean)=> void,
+    setIsVisible:(isVisible:boolean) => void
 }
+
 
 export interface IContextWeather {
     state: IWeatherData;
     setCoordinates: (payload: { latitude: number; longitude: number }) => void;
     setWeather: (payload: IWeatherData) => void;
     setLoading: (payload: boolean) => void;
+    setIsVisible: (payload: boolean) => void;
+}
+
+export interface KelvinCelsius{
+    temp:number,
+    temp_max:number,
+    temp_min:number,
+    feels_like:number
+}
+
+export interface IGetWeatherFilterLatAndLon extends ICoordinates{
+    setCoordinates: (payload: { latitude: number; longitude: number }) => void;
+    setWeather: ({ ...state }: IWeatherData)=> void, 
+    setLoading: (isLoading:boolean)=> void
+}
+
+export interface IGetWeatherFilterCity extends IName{
+    setWeather: ({...state}: IWeatherData)=> void, 
+    setLoading: (isLoading:boolean)=> void
+    setIsVisible: (isVisible:boolean) => void
 }

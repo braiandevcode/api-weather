@@ -1,7 +1,8 @@
 import { useReducer } from 'react';
-import { ActionApi, ICoordinates, IWeatherData } from '../types/types.d';
+import { ActionApi, ICoordinates, IWeatherData} from '../types/types.d';
 
-const initialState: IWeatherData = {
+// ESTADOS INICIALES
+const initialState: IWeatherData= {
     temp: 0,
     temp_max: 0,
     temp_min: 0,
@@ -11,16 +12,19 @@ const initialState: IWeatherData = {
     deg: 0,
     gust: 0,
     speed: 0,
-    latitude: 0,
-    longitude: 0,
+    latitude:0,
+    longitude:0,
     isLoading: true,
     icon:'',
     id:0,
     description:'',
+    isVisible: false,
 };
 
+// FUNCION REDUCER
 const reducer = (state: IWeatherData, action: ActionApi) => {
     const { type } = action;
+    // EVALUAR SEGUN TIPO
     if (type === 'SET_WEATHER') {
         return {
             ...state,
@@ -35,14 +39,14 @@ const reducer = (state: IWeatherData, action: ActionApi) => {
             speed: action.payload.speed,
             icon: action.payload.icon,
             id: action.payload.id,
-            description: action.payload.description
+            description: action.payload.description,
         };
     }
 
     if (type === 'SET_COORDINATES') {
         return {
             ...state,
-            ...action.payload
+            ...action.payload,
         };
     }
 
@@ -53,9 +57,18 @@ const reducer = (state: IWeatherData, action: ActionApi) => {
         };
     }
 
+
+    if(type === 'SET_VISIBLE'){
+        return {
+            ...state,
+            isVisible: action.payload
+        };
+    }
+
     return state;
 };
 
+// CUSTOM HOOK USEREDCUER
 export function useReducerWeather() {
     const [state, dispatch ] = useReducer(reducer, initialState);
 
@@ -71,10 +84,15 @@ export function useReducerWeather() {
         dispatch({ type: 'SET_LOADING', payload });
     };
 
+    const setIsVisible = (payload: boolean) => {
+        dispatch({ type: 'SET_VISIBLE', payload });
+    };
+
     return {
         state,
         setWeather, 
         setCoordinates, 
-        setLoading 
+        setLoading ,
+        setIsVisible
     };
 } 

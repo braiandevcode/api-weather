@@ -1,10 +1,12 @@
 import { FormSearch } from './FormSearch';
 
+// CABECERA
 export function Header() {
     return (
-        <header className='header-search'>
-            <h1>Clima City</h1>
-            <FormSearch />
-        </header>
+        <>
+            <header className='header-search'>
+                <FormSearch />
+            </header>
+        </>
     );
 }
