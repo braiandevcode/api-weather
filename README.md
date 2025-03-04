@@ -58,4 +58,4 @@ export default tseslint.config({
 
 ✅ Ni bien renderice el componente o App se vean datos del tiempo segun su localizacion.
 
-- Filtrar las busquedas en el input por nombre de Ciudad, Provincia o Pais.
+✅ Filtrar las busquedas en el input por nombre de Ciudad, Provincia o Pais.
