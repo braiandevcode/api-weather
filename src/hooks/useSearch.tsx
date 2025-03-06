@@ -8,14 +8,14 @@ import changeLocationLatAndLon from '../services/changeLocationLatAndLon';
 export function useSearch() {
     const REG_EXP: RegExp = /^-?\d*\.?\d*$/;
     // OBTENER VALOR DEL CONTEXTO
-    const context: IContextWeather | null = useContext(ContextWeather);
+    const contextWeather: IContextWeather | null = useContext(ContextWeather);
 
     // SI NO HAY CONTEXTO
-    if (!context) {
+    if (!contextWeather) {
         return null;
     }
     
-    const { setLoading, setWeather, setIsVisible } = context; //DESTRUCTURING
+    const { setLoading, setWeather } = contextWeather; //DESTRUCTURING
  
     // ESTADOS
     const [location, setLocation] = useState('');
@@ -24,6 +24,8 @@ export function useSearch() {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchQueryLat, setSearchQueryLat] = useState('');
     const [searchQueryLon, setSearchQueryLon] = useState('');
+    const [isVisible, setIsVisible] = useState(false);
+
 
     // CHANGE LONGITUDE CITY
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -95,11 +97,13 @@ export function useSearch() {
         handleChange,
         handleChangeLat,
         handleChangeLon,
+        setIsVisible,
         location,
         searchQuery,
         searchQueryLat,
         searchQueryLon,
         latManual,
-        longManual
+        longManual,
+        isVisible
     };
 }

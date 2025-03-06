@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ChangeEvent, FormEvent, ReactNode } from 'react';
 
 // PROPIEDAD LAT Y LON DE NAVIGATOR 
 export interface ICoordinates {
@@ -51,20 +51,27 @@ export interface IDataMinMax {
 // INTERFACE GENERAL QUE COMBINA TODOS LOS TIPOS
 export interface IWeatherData extends IDataHumFeel, IWeather, IWeatherMain, ICoordinates {
     isLoading: boolean;
-    isVisible: boolean;
 }
 
+// TYPE LOADING
 export type Loading = { isLoading: boolean }
 
-export type ActionApi =
+// ACTION PAYLOAD CITY USER
+export type ActionApiCityUser =
     | { type: 'SET_WEATHER', payload: IWeatherData  }
     | { type: 'SET_COORDINATES', payload: ICoordinates  }
     | { type: 'SET_LOADING', payload: boolean }
-    | { type: 'SET_VISIBLE', payload: boolean }
+
+    // ACTION PAYLOAD CITY USER
+export type ActionApiSearch =
+| { type: 'SET_FIELD', field: keyof ISearchForm; value: string | boolean }
 
 
+// TYPE CARDINAL
 export type Cardinals = 'Noreste' | 'Este' | 'Sureste' | 'Sur' | 'Suroeste' | 'Oeste' | 'Noroeste' | 'Norte';
 
+
+// ENUM CARDINALS
 export enum CardinalsEnum {
     N = 'Norte',
     NE = 'Noreste',
@@ -76,8 +83,8 @@ export enum CardinalsEnum {
     E = 'Este'
 }
 
-
-export interface ContextWeatherProviderProps {
+// INTERFACE TO PROVIDER
+export interface ContextProviderProps {
     children: ReactNode;
 }
 
@@ -87,21 +94,42 @@ export interface IGetLocationUser{
     setLoading:(isLoading:boolean)=>void
 }
 
+// INTERFACE GET WEATHER A REVISION
 export interface IGetWeather extends ICoordinates{ 
     setWeather: ({...state}: IWeatherData)=> void, 
     setLoading: (isLoading:boolean)=> void,
     setIsVisible:(isVisible:boolean) => void
 }
 
+// INTERFACE SEARCH FORM
+export interface ISearchForm {
+    location:string,
+    longManual:string,
+    latManual:string,
+    searchQuery:string, 
+    searchQueryLat: string,
+    searchQueryLon: string,
+    isVisible:boolean,
+}
 
-export interface IContextWeather {
+// INTERFACE CONTEXT SEARCH FORM
+export interface IContexSearch extends ISearchForm{
+    handleSubmit:(event:FormEvent<HTMLFormElement>) => void;
+    handleChange: (event:ChangeEvent<HTMLInputElement>) => void;
+    handleChangeLat:(event:ChangeEvent<HTMLInputElement>) => void;
+    handleChangeLon: (event:ChangeEvent<HTMLInputElement>) => void;
+    setField:(field: keyof ISearchForm, value: string | boolean) => void;
+}
+
+// INTERFACE CONTEXT WEATHER
+export interface  IContextWeather {
     state: IWeatherData;
     setCoordinates: (payload: { latitude: number; longitude: number }) => void;
     setWeather: (payload: IWeatherData) => void;
     setLoading: (payload: boolean) => void;
-    setIsVisible: (payload: boolean) => void;
 }
 
+// INTERFACE KELVIN TO CELSIUS
 export interface KelvinCelsius{
     temp:number,
     temp_max:number,
@@ -109,12 +137,7 @@ export interface KelvinCelsius{
     feels_like:number
 }
 
-export interface IGetWeatherFilterLatAndLon extends ICoordinates{
-    setCoordinates: (payload: { latitude: number; longitude: number }) => void;
-    setWeather: ({ ...state }: IWeatherData)=> void, 
-    setLoading: (isLoading:boolean)=> void
-}
-
+// INTERFACE FILTER CITY
 export interface IGetWeatherFilterCity extends IName{
     setWeather: ({...state}: IWeatherData)=> void, 
     setLoading: (isLoading:boolean)=> void

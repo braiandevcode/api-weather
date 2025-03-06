@@ -10,5 +10,5 @@ createRoot(document.getElementById('root')!).render(
     <ContextWeatherProvider>
       <App />
     </ContextWeatherProvider>
-  </StrictMode>,
+  </StrictMode>
 );

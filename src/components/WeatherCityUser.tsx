@@ -4,27 +4,31 @@ import getUserLocation from '../services/getUserGeoLocation';
 import getWeatherData from '../services/getWeatherData';
 import { ArticleData } from './ArticleData';
 import { ContextWeather } from '../context/ContextWeather';
-import { IContextWeather } from '../types/types.d';
+import { IContexSearch, IContextWeather } from '../types/types.d';
 import { Col, Row } from 'react-bootstrap';
 import { ModalErrorSearch } from './ModalErrorSearch';
-// import { ModalErrorSearch } from './ModalErrorSearch';
+import { ContextSearch } from '../context/ContextSearch';
 
 // COMPONENTE SECCION
-export function SectionWeatherCityUser() {
-    const handleClickModal = () => {
-        setIsVisible(false);
-    };
-    // Obtener el valor del contexto
-    const context: IContextWeather | null = useContext(ContextWeather);
+export function WeatherCityUser() {
+    // CONTEXTOS
+    const contextWeather: IContextWeather | null = useContext(ContextWeather);
+    const contextSearch: IContexSearch | null = useContext(ContextSearch);
 
-    if (!context) {
+    if (!contextWeather || !contextSearch) {
         return <Loading />;
     }
+    
+    const { state, setCoordinates, setLoading, setWeather } = contextWeather;
+    const { setField } = contextSearch;
 
-    const { state, setCoordinates, setLoading, setWeather, setIsVisible } = context;
     // DESESTRUCTURACION DEL STATE
     const { latitude, longitude, isLoading, name } = state;
 
+    const handleClickModal = () => {
+        setField('isVisible', true);
+    };
+    
     // OBTENER UBICACIÓN DEL USUARIO
     useEffect(() => {
         getUserLocation({ setCoordinates, setLoading });
@@ -33,7 +37,13 @@ export function SectionWeatherCityUser() {
     // CONSULTAR API CUANDO LAS COORDENADAS CAMBIAN
     useEffect(() => {
         if (!latitude || !longitude) return;
-        getWeatherData({ latitude: latitude, longitude: longitude, setWeather, setLoading, setIsVisible });
+        getWeatherData({ 
+            latitude, 
+            longitude, 
+            setWeather, 
+            setLoading, 
+            setIsVisible: (value)=> setField('isVisible', value)
+        });
     }, [latitude, longitude]); //DEPENDENCIA DE COORDENADAS
 
     // RENDERIZADO DEL COMPONENTE

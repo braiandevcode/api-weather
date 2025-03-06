@@ -1,5 +1,5 @@
 import { useReducer } from 'react';
-import { ActionApi, ICoordinates, IWeatherData} from '../types/types.d';
+import { ActionApiCityUser, ICoordinates, IWeatherData} from '../types/types.d';
 
 // ESTADOS INICIALES
 const initialState: IWeatherData= {
@@ -18,11 +18,10 @@ const initialState: IWeatherData= {
     icon:'',
     id:0,
     description:'',
-    isVisible: false,
 };
 
 // FUNCION REDUCER
-const reducer = (state: IWeatherData, action: ActionApi) => {
+const reducer = (state: IWeatherData, action: ActionApiCityUser) => {
     const { type } = action;
     // EVALUAR SEGUN TIPO
     if (type === 'SET_WEATHER') {
@@ -57,14 +56,6 @@ const reducer = (state: IWeatherData, action: ActionApi) => {
         };
     }
 
-
-    if(type === 'SET_VISIBLE'){
-        return {
-            ...state,
-            isVisible: action.payload
-        };
-    }
-
     return state;
 };
 
@@ -84,15 +75,10 @@ export function useReducerWeather() {
         dispatch({ type: 'SET_LOADING', payload });
     };
 
-    const setIsVisible = (payload: boolean) => {
-        dispatch({ type: 'SET_VISIBLE', payload });
-    };
-
     return {
         state,
         setWeather, 
         setCoordinates, 
         setLoading ,
-        setIsVisible
     };
 } 

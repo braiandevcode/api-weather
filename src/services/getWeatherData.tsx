@@ -44,7 +44,6 @@ const getWeatherData = async ({ latitude, longitude, setWeather, setLoading, set
                 isLoading: false,
                 latitude,
                 longitude,
-                isVisible:false
             });
         }
     } catch (error) {
