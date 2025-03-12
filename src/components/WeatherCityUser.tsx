@@ -12,7 +12,7 @@ import getWeatherDataExtend from '../services/getWeatherExtendTimeHours';
 import { ContextForecast } from '../context/ContextWheatherExtend';
 import formatDateToNameDay from '../helpers/formatDateToNameDay';
 import { separatorDate } from '../helpers/separatorDate';
-import { GeoAlt, Calendar } from 'react-bootstrap-icons'; // Importamos los iconos
+import { Calendar } from 'react-bootstrap-icons'; // Importamos los iconos
 
 // COMPONENTE SECCION
 export function WeatherCityUser() {
@@ -30,7 +30,7 @@ export function WeatherCityUser() {
     const { setForecastWeather, state: stateForecast } = contextForecast;
 
     // DESESTRUCTURACION DEL STATE
-    const { latitude, longitude, isLoading, name, dt } = state.currentWeather;
+    const { latitude, longitude, isLoading, dt } = state.currentWeather;
 
     const handleClickModal = () => {
         setField('isVisible', false);
@@ -88,12 +88,6 @@ export function WeatherCityUser() {
                             <Card className="shadow rounded-4 border-0 bg-light p-3">
                                 <Card.Body>
                                     <Stack direction="vertical" gap={3}>
-                                        {/* Nombre de la ciudad */}
-                                        <h4 className="p-0 m-0 fw-bold">
-                                            <GeoAlt size={20} className="text-primary" /> {/* Icono de ubicación */}
-                                            {name ? name : 'Desconocida'}
-                                        </h4>
-
                                         {/* Fecha */}
                                         <Stack direction="horizontal" gap={2} className="align-items-center">
                                             <Calendar size={20} className="text-secondary" /> {/* Icono de calendario */}

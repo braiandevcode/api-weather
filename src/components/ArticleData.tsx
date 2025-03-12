@@ -16,7 +16,7 @@ export function ArticleData() {
     if (!context) return null;
     return (
         <>
-            <Row className='justify-content-center'>
+            <Row className='justify-justify-content-start'>
                 <Col xs='auto'>
                     <DataImageName />
                     <DataMinMax />
@@ -30,10 +30,11 @@ export function ArticleData() {
 
 // ARTICULOS ETENDIDO CON LOS DATOS DEL CLIMA 
 export function ArticleDataExtendHour({ index, forecast }: { index: number, forecast: IForecastData[] }) {
-
+    const hour:string | undefined = separatorDate(' ', 1, false, forecast[index].date)?.split(':').slice(0,2).join(':');
+    if(hour === undefined || hour === null) return;
     return (
         <>
-            <ContentDataArticle index={index} forecast={forecast} time={`${separatorDate(':', 0, false, forecast[index].date)}:${separatorDate(':', 1, false, forecast[index].date)}hs`} />
+            <ContentDataArticle index={index} forecast={forecast} time={`${hour}hs`} />
         </>
     );
 }

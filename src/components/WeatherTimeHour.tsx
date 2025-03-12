@@ -2,10 +2,10 @@ import { useContext } from 'react';
 import { ContextForecast } from '../context/ContextWheatherExtend';
 import { Col, Row, Stack } from 'react-bootstrap';
 import { ArticleDataExtendHour } from './ArticleData';
-import { calculateColumnsUI } from '../helpers/ui';
 import { separatorDate } from '../helpers/separatorDate';
 import formatDateToNameDay from '../helpers/formatDateToNameDay';
 import { ExclamationTriangle } from 'react-bootstrap-icons'; // Importamos el icono de alerta
+import { calculateColumnsUI } from '../helpers/ui';
 
 export function WeatherTimeHour() {
     const contextForecast = useContext(ContextForecast);
@@ -22,10 +22,10 @@ export function WeatherTimeHour() {
     return (
         filterToday.length > 0 ? (
             <>
-                <h3 className="bg-primary text-light p-3 rounded shadow text-center mb-4">
+                <h3 className="bg-primary text-light p-3 rounded shadow  mb-4">
                     Clima durante el Día
                 </h3>
-                <Row className="justify-content-center align-items-center mb-2">
+                <Row className="mb-2">
                     {filterToday.map((_, index) => (
                         <Col
                             xs="auto"
