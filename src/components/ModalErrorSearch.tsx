@@ -1,23 +1,23 @@
 import { useContext } from 'react';
 import { Button, ModalBody, ModalDialog, ModalFooter, ModalHeader, ModalTitle } from 'react-bootstrap';
-import { ContextWeather } from '../context/ContextWeather';
+import { ContextSearch } from '../context/ContextSearch';
 
 export function ModalErrorSearch({ title, info,  handleClickModal }: { title: string, info: string, handleClickModal: ()=> void}) {
-   const context = useContext(ContextWeather);
+   const contextSearch = useContext(ContextSearch);
 
-   if(!context) return null;
+   if(!contextSearch) return null;
 
   return (
-    <div className={`modal ${context.state.isVisible ? 'd-block' : 'd-none' }`}>
-      <ModalDialog className='bg-gradient bg-success'>
-        <ModalHeader className='bg-gradient bg-success' onClick={handleClickModal} closeButton>
-          <ModalTitle className='text-warning fw-bold'>{title}</ModalTitle>
+    <div className={'modal'}>
+      <ModalDialog>
+        <ModalHeader className='bg-gradient bg-warning' onClick={handleClickModal} closeButton>
+          <ModalTitle className='fw-bold'>{title}</ModalTitle>
         </ModalHeader>
-        <ModalBody>
+        <ModalBody className='bg-gradient bg-body-tertiary'>
           <p className='text-secondary'>{info}</p>
         </ModalBody>
-        <ModalFooter>
-          <Button variant="secondary" onClick={handleClickModal}>Cerrar</Button>
+        <ModalFooter className='bg-gradient bg-body-tertiary'>
+          <Button variant="warning" onClick={handleClickModal}>Cerrar</Button>
         </ModalFooter>
       </ModalDialog>
     </div>

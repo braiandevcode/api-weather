@@ -10,24 +10,22 @@ export function ContextWeatherProvider({ children }: ContextProviderProps) {
     // USE DEL HOOK USEREDUCER
     const {
         state,
+        setCurrentWeather,
         setCoordinates,
-        setWeather,
         setLoading,
     } = useReducerWeather();
 
     // OBJETO TIPO "IContextWeather"
     const contextValue: IContextWeather = {
         state,
+        setCurrentWeather, 
         setCoordinates,
         setLoading,
-        setWeather,
     };
 
-    //RETORNO DE PROVIDER
+    // RETORNO DE PROVIDER
     return (
-        <ContextWeather.Provider
-            value={contextValue} 
-        >
+        <ContextWeather.Provider value={contextValue}>
             {children}
         </ContextWeather.Provider>
     );

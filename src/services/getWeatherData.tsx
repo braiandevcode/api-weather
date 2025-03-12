@@ -1,24 +1,22 @@
 import { dataUrl } from '../constants';
 import convertWindSpeed from '../helpers/convertWindSpeed';
 import { kelvinToCelsius } from '../helpers/kelvin';
+import query from '../helpers/query';
 import { IGetWeather, IDeg, IWeather, IWeatherMain, IWindSpeed } from '../types/types.d';
 
 // CONSULTAR CLIMA
-const getWeatherData = async ({ latitude, longitude, setWeather, setLoading, setIsVisible }: IGetWeather):Promise<void> => {
+const getWeatherData = async ({ latitude, longitude, setCurrentWeather, setIsVisible, setLoading, setButtonLoading }: IGetWeather):Promise<void> => {
     try {
-        setLoading(true); //MODIFICADOR DE ESTADO DE LOADING 
-        setIsVisible(false);
         const { DOMAIN, SEARCH } = dataUrl({ latitude, longitude });
         const URL = `${DOMAIN}${SEARCH}`;
 
-        const response = await fetch(URL);
-
-        if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
-
-        const result = await response.json();
+        const result = await query({ url:URL, setLoading, setButtonLoading, setIsVisible });
+        
+        console.log(result);
+        
 
         // SI HAY RESULTADOS
-        if (result) {
+        if (result) {            
             const { deg, gust, speed }: IDeg & IWindSpeed = result.wind; //DATOS DEL VIENTO            
             const { humidity, ...kelvinValues }: IWeatherMain = result.main; //HUMEDAD Y COMPIA DE OBJETO A NUEVO OBJETO
             const { description, id, icon }: IWeather = result.weather[0]; //DESCRIPCION, ID E ICONO
@@ -28,7 +26,7 @@ const getWeatherData = async ({ latitude, longitude, setWeather, setLoading, set
             const { temp, temp_min, temp_max, feels_like } = convertedTemperatures; // DESESTRUCTURAMOS
             
             // MODIFICADOR DE ESTADO DE CLIMA
-            setWeather({ 
+            setCurrentWeather({ 
                 temp, 
                 temp_min, 
                 temp_max, 
@@ -46,11 +44,11 @@ const getWeatherData = async ({ latitude, longitude, setWeather, setLoading, set
                 longitude,
             });
         }
-    } catch (error) {
-        console.error('Error obteniendo los datos del clima:', error);
+    } catch{
         setIsVisible(true);
-    } finally {
+    }finally{
         setLoading(false);
+        setButtonLoading(false);
     }
 };
 

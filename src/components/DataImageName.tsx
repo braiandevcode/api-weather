@@ -1,24 +1,35 @@
 import { useContext } from 'react';
-import { IconWeather } from './Icons';
+import { IconWeather, IconWeatherExtend } from './Icons';
 import { ContextWeather } from '../context/ContextWeather';
-import { IContextWeather } from '../types/types.d';
-import { Col, Row, Stack } from 'react-bootstrap';
+import { IContextWeather, IForecastData } from '../types/types.d';
+import { Col, Row, Stack, Card } from 'react-bootstrap';
 
 export function DataImageName() {
     const context = useContext(ContextWeather) as IContextWeather | null;
     if (!context) return null;
-    const { temp } = context.state;
+    const { temp } = context.state.currentWeather;
 
     return (
-        <>
-            <Row>
-                <Col xs='auto'>
-                    <Stack className='align-items-center' direction='horizontal' gap={1}>
-                        <IconWeather />
-                        <h3><strong>{temp.toFixed(1)} °C</strong></h3>
-                    </Stack>
-                </Col>
-            </Row>
-        </>
+        <Card.Text as={Row} className="justify-content-center">
+            <Col xs="auto">
+                <Stack className="align-items-center" direction="horizontal" gap={2}>
+                    <IconWeather />
+                    <span className="fw-bold fs-5 text-dark">{temp.toFixed(1)} °C</span>
+                </Stack>
+            </Col>
+        </Card.Text>
+    );
+}
+
+export function DataImageNameExtend({ index, forecast }: { index: number, forecast: IForecastData[] }) {
+    return (
+        <Card.Text as={Row} className="justify-content-center">
+            <Col xs="auto">
+                <Stack className="align-items-center" direction="horizontal" gap={2}>
+                    <IconWeatherExtend index={index} forecast={forecast} />
+                    <span className="fw-bold fs-5 text-dark">{forecast[index]?.temp.toFixed(1)} °C</span>
+                </Stack>
+            </Col>
+        </Card.Text>
     );
 }

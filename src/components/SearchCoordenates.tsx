@@ -1,27 +1,35 @@
 import { useContext, useEffect } from 'react';
 import { Col, FormControl, Stack } from 'react-bootstrap';
 import { ContextSearch } from '../context/ContextSearch';
-import { IContextWeather } from '../types/types.d';
+import { IContexSearch, IContextForecast, IContextWeather } from '../types/types.d';
 import { ContextWeather } from '../context/ContextWeather';
-import changeLocationLatAndLon from '../services/changeLocationLatAndLon';
+import changeLocation from '../services/changeLocation';
+import { ContextForecast } from '../context/ContextWheatherExtend';
+
 
 export function SearchCoordenates() {
     // OBTENER VALOR DEL CONTEXTO
     const contextWeather: IContextWeather | null = useContext(ContextWeather);
-    const contextSearch = useContext(ContextSearch);
+    const contextSearch: IContexSearch | null = useContext(ContextSearch);
+    const contextForecast: IContextForecast | null = useContext(ContextForecast);
 
-    if (!contextSearch || !contextWeather) return null;
 
-    const {  setWeather, setLoading } = contextWeather; //DESTRUCTURING CONTEXT WEATHER
-    const { searchQueryLat, searchQueryLon, longManual, latManual, handleChangeLat, handleChangeLon, setField } = contextSearch; //DESTRUCTURING CONTEXT SEARCH
+    if (!contextSearch || !contextWeather || !contextForecast) return null;
+
+    const {  setCurrentWeather, setLoading } = contextWeather; //DESTRUCTURING CONTEXT WEATHER
+    const { setForecastWeather } = contextForecast;
+    const { errors , searchQueryLat, searchQueryLon, longManual, latManual, handleChangeLat, handleChangeLon, setField } = contextSearch; //DESTRUCTURING CONTEXT SEARCH
     
     useEffect(() => {
         if (searchQueryLat && searchQueryLon) {
-            changeLocationLatAndLon({
+            changeLocation({
                 latitude: parseFloat(searchQueryLat),
                 longitude: parseFloat(searchQueryLon),
-                setWeather,
+                name: null,
+                setCurrentWeather,
+                setForecastWeather,
                 setLoading,
+                setButtonLoading: (value)=> setField('isButtonLoading', value),
                 setIsVisible: (value)=> setField('isVisible', value)
             });
         }
@@ -43,6 +51,7 @@ export function SearchCoordenates() {
                                 placeholder="Latitud - ej: 33.15565485"
                                 id='filterLatitude'
                             />
+                            { errors?.latManual?.isError && <p className='text-danger'><strong className='text-danger me-2'>Entrada invalida:</strong>{errors.latManual?.message}</p>}
                         </Stack>
                         <Stack gap={2}>
                             <FormControl
@@ -52,6 +61,7 @@ export function SearchCoordenates() {
                                 placeholder="Longitud - ej: -33.15565485"
                                 id='filterLongitude'
                             />
+                            { errors?.longManual?.isError && <p className='text-danger'><strong className='text-danger me-2'>Entrada invalida:</strong>{errors.longManual?.message}</p>}
                         </Stack>
                     </Stack>
                 </Stack>

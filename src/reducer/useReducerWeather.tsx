@@ -1,51 +1,52 @@
 import { useReducer } from 'react';
-import { ActionApiCityUser, ICoordinates, IWeatherData} from '../types/types.d';
+import { ActionApiCityUser, ICoordinates, IWeatherData, IState } from '../types/types.d';
 
-// ESTADOS INICIALES
-const initialState: IWeatherData= {
-    temp: 0,
-    temp_max: 0,
-    temp_min: 0,
-    humidity: 0,
-    feels_like: 0,
-    name: '',
-    deg: 0,
-    gust: 0,
-    speed: 0,
-    latitude:0,
-    longitude:0,
+// ESTADO INICIAL
+const initialState:IState = {
+    currentWeather: {
+        dt:0,
+        temp: 0,
+        temp_max: 0,
+        temp_min: 0,
+        humidity: 0,
+        feels_like: 0,
+        name: '',
+        deg: 0,
+        gust: 0,
+        speed: 0,
+        latitude: 0,
+        longitude: 0,
+        isLoading: true,
+        icon: '',
+        id: 0,
+        description: '',
+    },
     isLoading: true,
-    icon:'',
-    id:0,
-    description:'',
 };
 
 // FUNCION REDUCER
-const reducer = (state: IWeatherData, action: ActionApiCityUser) => {
+const reducer = (state:IState, action: ActionApiCityUser) => {
     const { type } = action;
-    // EVALUAR SEGUN TIPO
-    if (type === 'SET_WEATHER') {
+
+    if (type === 'SET_CURRENT_WEATHER') {
         return {
             ...state,
-            temp: action.payload.temp,
-            temp_max: action.payload.temp_max,
-            temp_min: action.payload.temp_min,
-            humidity: action.payload.humidity,
-            feels_like: action.payload.feels_like,
-            name: action.payload.name,
-            deg: action.payload.deg,
-            gust: action.payload.gust,
-            speed: action.payload.speed,
-            icon: action.payload.icon,
-            id: action.payload.id,
-            description: action.payload.description,
+            currentWeather: {
+                ...state.currentWeather,
+                ...action.payload,
+            },
+            isLoading: false,
         };
     }
 
     if (type === 'SET_COORDINATES') {
         return {
             ...state,
-            ...action.payload,
+            currentWeather: {
+                ...state.currentWeather,
+                latitude: action.payload.latitude,
+                longitude: action.payload.longitude,
+            },
         };
     }
 
@@ -59,26 +60,29 @@ const reducer = (state: IWeatherData, action: ActionApiCityUser) => {
     return state;
 };
 
-// CUSTOM HOOK USEREDCUER
+// CUSTOM HOOK USE-REDUCER
 export function useReducerWeather() {
-    const [state, dispatch ] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, initialState);
 
-    const setWeather = (payload: IWeatherData) => {
-        dispatch({ type: 'SET_WEATHER', payload });
+    // SET CURRENT WEATHER (Clima actual)
+    const setCurrentWeather = (payload: IWeatherData) => {
+        dispatch({ type: 'SET_CURRENT_WEATHER', payload });
     };
 
+    // SET COORDINATES
     const setCoordinates = (payload: ICoordinates) => {
         dispatch({ type: 'SET_COORDINATES', payload });
     };
 
+    // SET LOADING
     const setLoading = (payload: boolean) => {
         dispatch({ type: 'SET_LOADING', payload });
     };
 
     return {
         state,
-        setWeather, 
-        setCoordinates, 
-        setLoading ,
+        setCurrentWeather,
+        setCoordinates,
+        setLoading,
     };
-} 
+}

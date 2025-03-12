@@ -1,4 +1,4 @@
-import {IGetLocationUser } from '../types/types.d';
+import { IGetLocationUser } from '../types/types.d';
 
 // OBTENER UBICACION DEL USUARIO
 const getUserLocation = ({ setCoordinates, setLoading }:IGetLocationUser) => {
