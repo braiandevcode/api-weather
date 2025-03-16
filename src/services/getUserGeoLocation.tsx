@@ -5,9 +5,9 @@ const getUserLocation = ({ setCoordinates, setLoading }:GetLocationUser) => {
 
     // FUNCION QUE LOCALIZA LA POSICION DEL USUARIO
     const getPosition = (pos: GeolocationPosition) => {
+        setLoading(true);
         const { latitude, longitude } = pos.coords;    
         setCoordinates({ latitude, longitude }); //MODIFICADOR DE ESTADO DE  COORDENADAS
-        setLoading(false);
     };
 
     // FUNCION QUE EJECUTA EL MENSAJE DE ERROR EN LA GEOLOCALIZACIÓN
@@ -18,7 +18,7 @@ const getUserLocation = ({ setCoordinates, setLoading }:GetLocationUser) => {
 
     // SI HAY UNA GEOLOCALIZACIÓN
     if (navigator.geolocation) {
-        setLoading(true);
+        setLoading(false);
         navigator.geolocation.getCurrentPosition(getPosition, getError);
     } else {
         console.error('La geolocalización no está disponible.');
