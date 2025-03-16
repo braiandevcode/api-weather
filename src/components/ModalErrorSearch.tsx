@@ -17,7 +17,7 @@ export function ModalErrorSearch({ title, info,  handleClickModal }: { title: st
           <p className='text-secondary'>{info}</p>
         </ModalBody>
         <ModalFooter className='bg-gradient bg-body-tertiary'>
-          <Button variant="warning" onClick={handleClickModal}>Cerrar</Button>
+          <Button variant="warning" onClick={handleClickModal}>Close</Button>
         </ModalFooter>
       </ModalDialog>
     </div>

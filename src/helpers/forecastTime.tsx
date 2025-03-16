@@ -1,10 +1,5 @@
+import { ITimeDate } from '../types/types.d';
 import { separatorDate } from './separatorDate';
-
-export interface ITimeDate {
-    dateNow: string | null;
-    dateHour: string | null;
-    dateDate: string | null;
-}
 
 export const forecastTime = ({ dateNow, dateHour, dateDate }: ITimeDate): ITimeDate | null => {
     if (dateNow && dateHour && dateDate) {

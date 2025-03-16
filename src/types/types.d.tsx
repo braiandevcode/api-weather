@@ -1,139 +1,75 @@
 import { ChangeEvent, FormEvent, ReactNode } from 'react';
 
-// PROPIEDAD LAT Y LON DE NAVIGATOR 
-export interface ICoordinates {
-    latitude: number;
-    longitude: number;
-}
-
-// PROPIEDAD GUST Y SPEED DENTRO DE WIND
-export interface IWindSpeed {
-    gust: number;
-    speed: number;
-}
-
-// PROPIEDAD DEG DENTRO DE WIND
-export interface IDeg {
-    deg: number;
-}
-
-export interface IIcons {
-    icon: string;
-}
-
-export interface IName {
-    name: string | null;
-}
-
-export interface IWeather extends IIcons {
+// INTERFACE GENERAL QUE COMBINA TODOS LOS TIPOS
+export type IWeatherData = {
+    dt: number,
+    date: string,
+    temp: number,
+    temp_max: number,
+    temp_min: number,
+    humidity: number,
+    feels_like: number,
+    name: string | null,
+    deg: number,
+    gust: number,
+    speed: number,
+    latitude: number,
+    longitude: number,
+    isLoading: boolean,
+    icon: string,
     id: number,
     description: string,
 }
 
-export interface IDataImageName extends IIcons {
-    temp: number
-};
-
-export interface IDataHumFeel {
-    humidity: number;
-    feels_like: number;
-};
-
-export interface IWeatherMain extends IDataMinMax, IDeg, IWindSpeed, IDataHumFeel, IName {
-    temp: number;
-}
-
-export interface IDataMinMax {
-    temp_min: number,
-    temp_max: number
-};
-
-// INTERFACE GENERAL QUE COMBINA TODOS LOS TIPOS
-export interface IWeatherData extends IDataHumFeel, IWeather, IWeatherMain, ICoordinates {
-    dt:number,
-    isLoading: boolean;
-}
-
-// Ahora, creamos la interfaz IForecastData extendiendo IWeatherData
-export interface IForecastData extends IWeatherData {
-    dt:number;
-    date: string; // solo agregamos el campo 'date'
-}
-
-// TYPE LOADING
-export type Loading = { isLoading: boolean }
-
-export interface IState {
-    currentWeather: IWeatherData;
-    isLoading: boolean;
-}
-
-export interface IStateForeCast {
-    forecast: IForecastData[];
-}
-
-export type Errors = { 
-    [key in keyof ISearchForm]?: { 
-        isError: boolean; 
-        message: string; 
-    } 
-};
-
-
 // INTERFACE SEARCH FORM
 export interface ISearchForm {
-    location:string;
-    longManual:string;
-    latManual:string;
-    searchQuery:string;
+    location: string;
+    longManual: string;
+    latManual: string;
+    searchQuery: string;
     searchQueryLat: string;
     searchQueryLon: string;
-    isVisible:boolean;
-    errors:Errors
-    isButtonLoading:boolean
+    isVisible: boolean;
+    errors: Errors;
+    isButtonLoading: boolean;
+    url: string;
 }
 
-// ACTION PAYLOAD CITY USER
-export type ActionApiCityUser = 
-    | { type: 'SET_CURRENT_WEATHER', payload: IWeatherData }
-    | { type: 'SET_COORDINATES', payload: ICoordinates }
-    | { type: 'SET_LOADING', payload: boolean };
-
-export type ActionForecastWeather =
-    | { type: 'SET_FORECAST_WEATHER', payload: IForecastData[] }
-    | { type: 'SET_FORECAST_INDEX', payload:number }
-
-// ACTION PAYLOAD CITY USER
-export type ActionApiSearch =
-| { type: 'SET_FIELD', field: keyof ISearchForm; value: string | boolean }
-| { type: 'SET_ERROR', field: keyof ISearchForm; value: Errors[keyof ISearchForm] }
-| { type: 'SET_BUTTON_LOADING', field: keyof ISearchForm; value: boolean }
-
-
-
-// TYPE CARDINAL
-export type Cardinals = 'Noreste' | 'Este' | 'Sureste' | 'Sur' | 'Suroeste' | 'Oeste' | 'Noroeste' | 'Norte';
-
-// ENUM CARDINALS
-export enum CardinalsEnum {
-    N = 'Norte',
-    NE = 'Noreste',
-    NOE = 'Noroeste',
-    S = 'Sur',
-    SE = 'Sureste',
-    SOE = 'Suroeste',
-    O = 'Oeste',
-    E = 'Este'
+// INTERFACE STATE
+export interface IState {
+    currentWeather: Omit<IWeatherData, 'date' | 'id'>;
+    forecast: IWeatherData[];
 }
 
-export enum TimeDate{
-    LIGTH_NIGTH='21:00:00',
+// INTERFACE FORECAST
+export interface IForecastDay {
+    dt: Pick<IWeatherData, 'dt'>;
+    dt_txt: Pick<IWeatherData, 'date'>;
+    main: WeatherMain;
+    weather: Pick<IWeatherData, 'icon' | 'id' | 'description'>[];
+    wind: Pick<IWeatherData, 'deg' | 'speed' | 'gust'>;
 }
 
-// ENUM CARDINALS
-export enum ErrorsMessage{
-    S_LAT_LONG = 'Solo se admiten números negativos o positivos.',
-    S_LOCATION = 'Solo se admiten letras.',
+// INTERFACE GET WEATHER A REVISION
+export interface IGetWeather extends Coordinates {
+    setLoading: (isLoading: boolean) => void;
+    setIsVisible: (isVisible: boolean) => void;
+    setButtonLoading: (value: boolean) => void;
+    setCurrentWeather: ({ ...state }: Omit<IWeatherData, 'date' | 'id'>) => void;
+    setForecastWeather: (payload: IWeatherData[]) => void;
+    setCoordinates: ({ latitude, longitude }: Coordinates) => void;
+    stateCurrentWeather: Pick<IState, 'currentWeather'>;
+    stateForecastWeather: Pick<IState, 'forecast'>;
+}
+
+// INTERFACE HANDLE CHANGES
+export interface IHandleChangeSearch {
+    setErrors: (field: keyof Errors, value: Errors[keyof ISearchForm]) => void;
+    handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
+    handleChangeCity: (event: ChangeEvent<HTMLInputElement>) => void;
+    handleChangeLat: (event: ChangeEvent<HTMLInputElement>) => void;
+    handleChangeLon: (event: ChangeEvent<HTMLInputElement>) => void;
+    setField: (field: keyof ISearchForm, value: string | boolean) => void;
 }
 
 // INTERFACE TO PROVIDER
@@ -141,83 +77,126 @@ export interface ContextProviderProps {
     children: ReactNode;
 }
 
+export interface ITimeDate {
+    dateNow: string | null;
+    dateHour: string | null;
+    dateDate: string | null;
+}
+
+export interface IHandleChangeLatAndLon extends Pick<IHandleChangeSearch, 'setErrors' | 'setField'> {
+    event: React.ChangeEvent<HTMLInputElement>;
+    regExp: RegExp;
+    field: keyof ISearchForm;
+    isError: boolean;
+    message: string;
+}
+
+export type WeatherMain = Pick<IWeatherData, 'temp' | 'temp_max' | 'temp_min' | 'deg' | 'speed' | 'humidity' | 'feels_like' | 'name'>;
+
+// COORDINATES NUMBERS
+export type Coordinates = Pick<IWeatherData, 'latitude' | 'longitude'>;
+
+export type Errors = {
+    [key in keyof ISearchForm]?: {
+        isError: boolean;
+        message: string;
+    }
+};
+
+// ACTION PAYLOAD CITY USER
+export type ActionApiCityUser =
+    | { type: 'SET_CURRENT_WEATHER', payload: Omit<IWeatherData, 'date' | 'id'> }
+    | { type: 'SET_COORDINATES', payload: Coordinates }
+    | { type: 'SET_LOADING', payload: boolean };
+
+export type ActionForecastWeather =
+    | { type: 'SET_FORECAST_WEATHER', payload: IWeatherData[] }
+
+// ACTION PAYLOAD CITY USER
+export type ActionApiSearch =
+    | { type: 'SET_FIELD', field: keyof ISearchForm; value: string | boolean }
+    | { type: 'SET_ERROR', field: keyof ISearchForm; value: Errors[keyof ISearchForm] }
+    | { type: 'SET_BUTTON_LOADING', field: keyof ISearchForm; value: boolean }
+
+// TYPE CARDINAL
+export type Cardinals = 'Northeast' | 'East' | 'Southeast' | 'South' | 'Southwest' | 'West' | 'Northwest' | 'North';
+
+export type Languages = 'es-ES' | 'en-US' | 'fr-FR' | 'de-DE';
+
+// ENUM CARDINALS
+export enum CardinalsEnum {
+    N = 'North',
+    NE = 'Northeast',
+    NOE = 'Northwest',
+    S = 'South',
+    SE = 'Southeast',
+    SOE = 'Southwest',
+    O = 'West',
+    E = 'East'
+}
+
+export enum LanguageDay {
+    es = 'es-ES',
+    en = 'en-US',
+    fr = 'fr-FR',
+    de = 'de-DE',
+}
+
+export enum FieldsSearchForm {
+    LOCATION = 'location',
+    LATITUDE = 'latManual',
+    LONGITUDE = 'longManual',
+}
+
+// ENUM DATE HOUR
+export enum DateHour {
+    LIGTH_NIGTH = '21:00:00',
+}
+
+// ENUM CARDINALS
+export enum ErrorsMessage {
+    S_LAT_LONG = 'Only negative or positive numbers are allowed.',
+    S_LOCATION = 'Only letters are allowed.',
+}
+
 // OBTENER UBIACION DEL USUARIO
-export interface IGetLocationUser{
-    setCoordinates:( { latitude, longitude }: ICoordinates)=> void;
-    setLoading:(isLoading:boolean)=>void;
-}
+export type GetLocationUser = Pick<IGetWeather, 'setCoordinates' | 'setLoading'>;
+
+export type GetForecastWeather = Omit<IGetWeather, 'setCurrentWeather'>;
 
 // INTERFACE GET WEATHER A REVISION
-export interface IGetWeather extends ICoordinates{ 
-    setLoading: (isLoading:boolean)=> void;
-    setIsVisible:(isVisible:boolean) => void;
-    setButtonLoading:(value:boolean) => void;
-    setCurrentWeather: ({...state}: IWeatherData)=> void;
-}
-
-export interface IGetForecastWeather extends ICoordinates{ 
-    setLoading: (isLoading:boolean)=> void;
-    setIsVisible:(isVisible:boolean) => void;
-    setButtonLoading:(value:boolean) => void;
-    setForecastWeather:(payload: IForecastData[]) => void
-}
-
-// INTERFACE GET WEATHER A REVISION
-export interface IQuery{ 
-    url:string,
-    setLoading: (isLoading:boolean)=> void;
-    setIsVisible:(isVisible:boolean) => void;
-    setButtonLoading:(value:boolean) => void;
-}
+export type Query = Pick<ISearchForm, 'url'> & Pick<IGetWeather, 'setLoading' | 'setButtonLoading' | 'setIsVisible'>;
 
 // INTERFACE CONTEXT SEARCH FORM
-export interface IContexSearch extends ISearchForm{
-    handleSubmit:(event:FormEvent<HTMLFormElement>) => void;
-    handleChange: (event:ChangeEvent<HTMLInputElement>) => void;
-    handleChangeLat:(event:ChangeEvent<HTMLInputElement>) => void;
-    handleChangeLon: (event:ChangeEvent<HTMLInputElement>) => void;
-    setField:(field: keyof ISearchForm, value: string | boolean ) => void;
-    setButtonLoading:(field: keyof ISearchForm, value: boolean ) => void;
-}
+
+export type ContexSearch = ISearchForm & IHandleChangeSearch & Pick<IGetWeather, 'setButtonLoading'>;
 
 // INTERFACE CONTEXT WEATHER
-export interface  IContextWeather {
-    state: IState;
-    setCoordinates: (payload: { latitude: number; longitude: number }) => void;
-    setCurrentWeather: (payload: IWeatherData) => void;
-    setLoading: (payload: boolean) => void;
-}
+export type ContextCurrentWeather = Pick<IGetWeather, 'stateCurrentWeather' | 'setCoordinates' | 'setCurrentWeather' | 'setLoading'>;
 
 // INTERFACE KELVIN TO CELSIUS
-export interface KelvinCelsius{
-    temp:number,
-    temp_max:number,
-    temp_min:number,
-    feels_like:number
-}
+export type KelvinCelsius = Pick<IWeatherData, 'temp' | 'temp_max' | 'temp_min' | 'feels_like'>;
 
-export interface IContextForecast {
-    state: IStateForeCast,
-    setForecastWeather: (payload: IForecastData[]) => void;
-}
-
-// INTERFACE FILTER CITY
-export interface IGetWeatherFilterCity extends IName, ICoordinates{
-    setCurrentWeather: ({...state}: IWeatherData)=> void; 
-    setForecastWeather: (payload: IForecastData[]) => void;
-    setLoading: (isLoading:boolean)=> void;
-    setButtonLoading: (value:boolean)=>void;
-    setIsVisible: (isVisible:boolean) => void;
-}
-
-export interface IForecastDay {
-    dt:number;
-    dt_txt: string;
-    main: IWeatherMain;
-    weather: IWeather[];
-    wind: IDeg & IWindSpeed;
-}
-
+export type ContextForecastWeather = Pick<IGetWeather, 'stateForecastWeather' | 'setForecastWeather'>;
 
 // RECORD KELVIN
 export type KeyKelvin = Record<string, number>;
+
+
+// TYPES TO CAROUSEL RESPONSIVE
+export type MinMax= {
+    max: number; 
+    min: number 
+}
+
+export type WindowDevice = {
+    breakpoint: MinMax;
+    items: number;
+    slidesToSlide: number;
+}
+
+export type ConfigItem = WindowDevice & {
+    name: string;
+};
+export type Responsive =  Record<string, WindowDevice>;
+  

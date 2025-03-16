@@ -1,14 +1,14 @@
 import { createContext } from 'react';
-import { ContextProviderProps, IContextForecast } from '../types/types.d';
+import { ContextProviderProps, ContextForecastWeather } from '../types/types.d';
 import { useReducerForecast } from '../reducer/useReducerForecast';
 
-export const ContextForecast = createContext<IContextForecast | null>(null);
+export const ContextForecast = createContext<ContextForecastWeather | null>(null);
 
 export function ContextForecastProvider({ children }: ContextProviderProps) {
     const { state , setForecastWeather } = useReducerForecast();
 
-    const contextValue: IContextForecast = {
-        state,
+    const contextValue: ContextForecastWeather= {
+        stateForecastWeather:state,
         setForecastWeather,
     };
 

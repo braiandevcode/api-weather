@@ -1,7 +1,7 @@
-import { IQuery } from '../types/types.d';
+import { Query } from '../types/types.d';
 
 // CONSULTAS A API
-const query = async ({ url, setLoading, setButtonLoading, setIsVisible }: IQuery) => {
+const query = async ({ url, setLoading, setButtonLoading, setIsVisible }: Query) => {
     try {
         setLoading(true);
         setButtonLoading(false);

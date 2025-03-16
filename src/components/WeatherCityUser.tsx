@@ -1,40 +1,43 @@
 import { useContext, useEffect } from 'react';
-import { Loading } from './Loading';
 import getUserLocation from '../services/getUserGeoLocation';
 import getWeatherData from '../services/getWeatherData';
 import { ArticleData } from './ArticleData';
-import { ContextWeather } from '../context/ContextWeather';
-import { IContexSearch, IContextForecast, IContextWeather } from '../types/types.d';
+import { ContextWeather } from '../context/ContextCurrentWeather';
+import { ContexSearch, ContextCurrentWeather, ContextForecastWeather } from '../types/types.d';
 import { Card, Col, Row, Stack } from 'react-bootstrap';
-import { ModalErrorSearch } from './ModalErrorSearch';
 import { ContextSearch } from '../context/ContextSearch';
 import getWeatherDataExtend from '../services/getWeatherExtendTimeHours';
-import { ContextForecast } from '../context/ContextWheatherExtend';
+import { ContextForecast } from '../context/ContextForecastWheather';
 import formatDateToNameDay from '../helpers/formatDateToNameDay';
 import { separatorDate } from '../helpers/separatorDate';
 import { Calendar } from 'react-bootstrap-icons'; // Importamos los iconos
+import { Loading } from './Loading';
 
 // COMPONENTE SECCION
 export function WeatherCityUser() {
     // CONTEXTOS
-    const contextWeather: IContextWeather | null = useContext(ContextWeather);
-    const contextSearch: IContexSearch | null = useContext(ContextSearch);
-    const contextForecast: IContextForecast | null = useContext(ContextForecast);
+    const contextWeather: ContextCurrentWeather | null = useContext(ContextWeather);
+    const contextSearch: ContexSearch | null = useContext(ContextSearch);
+    const contextForecast: ContextForecastWeather | null = useContext(ContextForecast);
 
     if (!contextWeather || !contextSearch || !contextForecast) {
-        return null;
+        return <Loading />;
     }
 
-    const { state, setCoordinates, setLoading, setCurrentWeather } = contextWeather;
-    const { setField, isVisible } = contextSearch;
-    const { setForecastWeather, state: stateForecast } = contextForecast;
+    const { stateCurrentWeather, setCoordinates, setLoading, setCurrentWeather } = contextWeather;
+    const { setField } = contextSearch;
+    const { setForecastWeather, stateForecastWeather } = contextForecast;
 
     // DESESTRUCTURACION DEL STATE
-    const { latitude, longitude, isLoading, dt } = state.currentWeather;
+    const { latitude, longitude, dt } = stateCurrentWeather.currentWeather;
+    const { forecast } = stateForecastWeather;
 
-    const handleClickModal = () => {
-        setField('isVisible', false);
-    };
+    if (!forecast) return null;
+    const date: string = forecast[0]?.date;
+
+    // const handleClickModal = () => {
+    //     setField('isVisible', false);
+    // };
 
     // OBTENER UBICACIÓN DEL USUARIO
     useEffect(() => {
@@ -45,7 +48,7 @@ export function WeatherCityUser() {
     useEffect(() => {
         if (!latitude || !longitude) return;
         const query = async () => {
-            return await Promise.all([  
+            return await Promise.all([
                 getWeatherData({
                     latitude,
                     longitude,
@@ -58,8 +61,6 @@ export function WeatherCityUser() {
                     latitude,
                     longitude,
                     setForecastWeather,
-                    setLoading,
-                    setButtonLoading: (value) => setField('isButtonLoading', value),
                     setIsVisible: (value) => setField('isVisible', value),
                 })
             ]);
@@ -69,49 +70,26 @@ export function WeatherCityUser() {
 
     // RENDERIZADO DEL COMPONENTE
     return (
-        <>
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <>
-                    {isVisible && (
-                        <ModalErrorSearch
-                            handleClickModal={handleClickModal}
-                            title="Upps!!"
-                            info="La zona especificada no fue encontrada. Vuelve a intentarlo."
-                        />
-                    )}
-
-                    <Row className="justify-content-center align-content-center">
-                        <Col xs="12">
-                            {/* Aquí agregamos la tarjeta para mejorar el diseño */}
-                            <Card className="shadow rounded-4 border-0 bg-light p-3">
-                                <Card.Body>
-                                    <Stack direction="vertical" gap={3}>
-                                        {/* Fecha */}
-                                        <Stack direction="horizontal" gap={2} className="align-items-center">
-                                            <Calendar size={20} className="text-secondary" /> {/* Icono de calendario */}
-                                            <p className="p-0 m-0 fs-3 text-secondary">
-                                                {formatDateToNameDay(dt)}
-                                            </p>
-                                            -
-                                            <span className="text-danger fs-3">
-                                                {separatorDate(' ', 0, false, stateForecast.forecast[0]?.date)
-                                                    ?.split('-')
-                                                    .reverse()
-                                                    .join('-')}
-                                            </span>
-                                        </Stack>
-
-                                        {/* Datos adicionales */}
-                                        <ArticleData />
-                                    </Stack>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-                </>
-            )}
-        </>
+        <Row className="justify-content-center align-content-center">
+            <Col xs="12">
+                <Card className="shadow rounded-4 border-0 bg-light p-3">
+                    <Card.Body>
+                        <Stack direction="vertical" gap={3}>
+                            <Stack direction="horizontal" gap={2} className="align-items-xl-center align-items-xl-center justify-content-xl-around justify-content-center flex-column flex-xl-row">
+                               <Stack direction="horizontal" gap={2} className="align-items-center">
+                                    <Calendar size={20} className="text-secondary" />
+                                    <p className="p-0 m-0 fs-5 fs-lg-3 text-secondary">{formatDateToNameDay(dt)}</p>
+                                </Stack>
+                                <span className="text-warning fw-bold fs-5 fs-lg-4 ">
+                                    {separatorDate(' ', 0, false, date)?.split('-').reverse().join('-')}
+                                </span>
+                            </Stack>
+                            <ArticleData />
+                        </Stack>
+                    </Card.Body>
+                </Card>
+            </Col>
+        </Row>
     );
+
 }

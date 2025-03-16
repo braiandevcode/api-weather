@@ -1,79 +1,79 @@
 import { ChangeEvent, createContext, FormEvent } from 'react';
-import { ContextProviderProps, IContexSearch } from '../types/types.d';
-import formatCoordinateCustom from '../helpers/formatCoordinates';
+import { ContextProviderProps, ContexSearch } from '../types/types.d';
+// import formatCoordinateCustom from '../helpers/formatCoordinates';
 import { useReducerSearch } from '../reducer/useReducerSearch';
 import { ERRORS_SEARCH_FORM } from '../constants';
+import { handleChangeGenerally } from '../helpers/handleChangeGenerally';
 
 // CONTEXTO
-export const ContextSearch = createContext<IContexSearch | null>(null);
+export const ContextSearch = createContext<ContexSearch | null>(null);
 
 // COMPONENTE PROVIDER
 export function ContextSearchProvider({ children }: ContextProviderProps) {
-    const { state, setField, setErrors, setButtonLoading } = useReducerSearch();
+    const { state, setField, setErrors } = useReducerSearch();
     const REG_EXP_NUM: RegExp = /^-?\d*\.?\d*$/;
     const REG_EXP_CITY: RegExp = /^[a-zA-Z\s]+$/;
 
     // CHANGE LOCATION
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        if (!REG_EXP_CITY.test(value) && value !== '') {
-            setErrors('location', { isError: true, message: ERRORS_SEARCH_FORM.location.message });
-        } else {
-            setErrors('location', { isError: false, message: '' });
-        }
-        setField('location', value);
+    const handleChangeCity = (event: ChangeEvent<HTMLInputElement>) => {
+        return handleChangeGenerally({
+            event,
+            regExp: REG_EXP_CITY,
+            setErrors,
+            setField,
+            field: 'location',
+            isError: true,
+            message: ERRORS_SEARCH_FORM.location.message,
+        });
     };
 
     // CHANGE LATITUDE
-    const handleChangeLat = (event: ChangeEvent<HTMLInputElement>) => {
-        let value = event.target.value;
-        if (!REG_EXP_NUM.test(value)) {
-            setErrors('latManual', { isError: true, message: ERRORS_SEARCH_FORM.latManual.message });
-        } else {
-            // SI EL VALOR TIENE MÁS DE 2 CARACTERES Y NO CONTIENE UN PUNTO, INSERTAMOS EL PUNTO EN LA POSICIÓN CORRECTA
-            if (value.length > 2 && !value.includes('.')) {
-                value = value.includes('-') ? `${value.slice(0, 3)}.${value.slice(3)}` : `${value.slice(0, 2)}.${value.slice(2)}`;  // INSERTAR PUNTO LUEGO DE LOS PRIMEROS 2 DIGITOS
-            }
-            setErrors('latManual', { isError: false, message: '' });
-        }
-        setField('latManual', value);
+    const handleChangeLat = (event: ChangeEvent<HTMLInputElement>) =>{
+        return handleChangeGenerally({ 
+            event, 
+            regExp: REG_EXP_NUM, 
+            setErrors, 
+            setField, 
+            field: 'latManual', 
+            isError: true, 
+            message: ERRORS_SEARCH_FORM.latManual.message 
+        });
     };
-
+    
     // CHANGE LONGITUDE
     const handleChangeLon = (event: ChangeEvent<HTMLInputElement>) => {
-        let value = event.target.value;
-        if (!REG_EXP_NUM.test(value)) {
-            setErrors('longManual', { isError: true, message: ERRORS_SEARCH_FORM.longManual.message });
-        } else {
-            // SI EL VALOR TIENE MÁS DE 2 CARACTERES Y NO CONTIENE UN PUNTO, INSERTAMOS EL PUNTO EN LA POSICIÓN CORRECTA
-            if (value.length > 2 && !value.includes('.')) {
-                value = value.includes('-') ? `${value.slice(0, 3)}.${value.slice(3)}` : `${value.slice(0, 2)}.${value.slice(2)}`;  // INSERTAR PUNTO LUEGO DE LOS PRIMEROS 2 DIGITOS
-            }
-            setErrors('longManual', { isError: false, message: '' });
-        }
-        setField('longManual', value);
+        return handleChangeGenerally({ 
+            event, 
+            regExp: REG_EXP_NUM, 
+            setErrors, 
+            setField, 
+            field: 'longManual', 
+            isError: true, 
+            message: ERRORS_SEARCH_FORM.longManual.message 
+        });
     };
 
     // SUBMIT
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        // SI HAY UNA UBICACIÓN
         if (state.location) {
             setField('searchQuery', state.location);
             setField('location', '');
-        } else if (state.latManual && state.longManual) {
+        } else if (state.latManual && state.longManual) { // SI HAY UNA COORDENADA
             const latitude = parseFloat(state.latManual);
             const longitude = parseFloat(state.longManual);
 
             if (!isNaN(latitude) && !isNaN(longitude)) {
-                setField('searchQueryLat', formatCoordinateCustom(latitude));
-                setField('searchQueryLon', formatCoordinateCustom(longitude));
+                setField('searchQueryLat', latitude.toString());
+                setField('searchQueryLon', longitude.toString());
             }
             setField('latManual', '');
             setField('longManual', '');
         }
 
-
+        // SI HAY UNA UBICACIÓN Y UNA COORDENADA
         if((state.latManual || state.longManual) &&  state.location){
             setField('searchQuery', '');
             setField('searchQueryLat', '');
@@ -84,15 +84,17 @@ export function ContextSearchProvider({ children }: ContextProviderProps) {
         }
     };
 
+    // RENDER PROVIDER CON VALOR DEL CONTEXTO
     return (
         <ContextSearch.Provider value={{
             ...state,
             handleSubmit,
-            handleChange,
+            handleChangeCity,
             handleChangeLat,
             handleChangeLon,
+            setErrors,
             setField,
-            setButtonLoading
+            setButtonLoading:(value => setField('isButtonLoading', value)),
         }}>
             {children}
         </ContextSearch.Provider>

@@ -1,8 +1,7 @@
 import { useReducer } from 'react';
-import { ActionApiCityUser, ICoordinates, IWeatherData, IState } from '../types/types.d';
-
+import { ActionApiCityUser, IWeatherData, IState, Coordinates } from '../types/types.d';
 // ESTADO INICIAL
-const initialState:IState = {
+const initialState:Pick<IState, 'currentWeather'> = {
     currentWeather: {
         dt:0,
         temp: 0,
@@ -10,7 +9,7 @@ const initialState:IState = {
         temp_min: 0,
         humidity: 0,
         feels_like: 0,
-        name: '',
+        name: null,
         deg: 0,
         gust: 0,
         speed: 0,
@@ -18,14 +17,12 @@ const initialState:IState = {
         longitude: 0,
         isLoading: true,
         icon: '',
-        id: 0,
         description: '',
     },
-    isLoading: true,
 };
 
 // FUNCION REDUCER
-const reducer = (state:IState, action: ActionApiCityUser) => {
+const reducer = (state:Pick<IState, 'currentWeather'>, action: ActionApiCityUser) => {
     const { type } = action;
 
     if (type === 'SET_CURRENT_WEATHER') {
@@ -35,7 +32,6 @@ const reducer = (state:IState, action: ActionApiCityUser) => {
                 ...state.currentWeather,
                 ...action.payload,
             },
-            isLoading: false,
         };
     }
 
@@ -53,7 +49,10 @@ const reducer = (state:IState, action: ActionApiCityUser) => {
     if (type === 'SET_LOADING') {
         return {
             ...state,
-            isLoading: action.payload,
+            currentWeather: {
+                ...state.currentWeather,
+                isLoading:action.payload,
+            },
         };
     }
 
@@ -65,12 +64,12 @@ export function useReducerWeather() {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     // SET CURRENT WEATHER (Clima actual)
-    const setCurrentWeather = (payload: IWeatherData) => {
+    const setCurrentWeather = (payload: Omit<IWeatherData, 'date' | 'id'>) => {
         dispatch({ type: 'SET_CURRENT_WEATHER', payload });
     };
 
     // SET COORDINATES
-    const setCoordinates = (payload: ICoordinates) => {
+    const setCoordinates = (payload: Coordinates) => {
         dispatch({ type: 'SET_COORDINATES', payload });
     };
 

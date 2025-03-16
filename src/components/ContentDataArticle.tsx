@@ -3,9 +3,10 @@ import { DataImageNameExtend } from './DataImageName';
 import { DataMinMaxExtend } from './DataMinMax';
 import { DataWindExtend } from './DataWind';
 import { DataHumFeelsExtend } from './DataHumFeels';
-import { IForecastData } from '../types/types.d';
+import { IWeatherData } from '../types/types.d';
 
-export function ContentDataArticle({ index, forecast, time }: { index: number, forecast: IForecastData[], time: string }) {
+// COMPONENTE CONTENIDO DE ARTÍCULO
+export function ContentDataArticle({ index, forecast, time }: { index: number, forecast: IWeatherData[], time: string | null }) {
     return (
         <Stack direction="vertical" gap={3}>
             <Card className="bg-light text-body rounded-3 shadow-lg"> 

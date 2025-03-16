@@ -1,11 +1,11 @@
 import { useReducer } from 'react';
-import { ActionForecastWeather, IForecastData, IStateForeCast } from '../types/types.d';
+import { ActionForecastWeather, IState, IWeatherData } from '../types/types.d';
 
-const initialState:IStateForeCast = {
-    forecast: [] as IForecastData[],
+const initialState: Pick<IState, 'forecast'> = {
+    forecast: [],
 };
 
-const reducer = (state: IStateForeCast , action: ActionForecastWeather) => {
+const reducer = (state: Pick<IState, 'forecast'> , action: ActionForecastWeather) => {
     if (action.type === 'SET_FORECAST_WEATHER') {
         return {
             ...state,
@@ -18,7 +18,7 @@ const reducer = (state: IStateForeCast , action: ActionForecastWeather) => {
 export function useReducerForecast() {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const setForecastWeather = (payload: IForecastData[]) => {
+    const setForecastWeather = (payload: IWeatherData[]) => {
         dispatch({ type: 'SET_FORECAST_WEATHER', payload });
     };
 

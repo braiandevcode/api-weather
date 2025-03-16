@@ -8,6 +8,7 @@ const initialState: ISearchForm = {
     searchQuery: '',
     searchQueryLat: '',
     searchQueryLon: '',
+    url:'',
     isVisible: false,
     isButtonLoading:false,
     errors: {}

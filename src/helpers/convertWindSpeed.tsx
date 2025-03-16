@@ -1,7 +1,7 @@
-import { IWindSpeed } from '../types/types.d';
+import { IWeatherData } from '../types/types.d';
 
 // CONVERTIR LOS VALORES DEL VIENTO DE M/S A KM/H
-export default function convertWindSpeed({ gust, speed }: IWindSpeed){
+export default function convertWindSpeed({ gust, speed }: Pick<IWeatherData, 'gust' | 'speed'>){
     const gustCalc = gust * 3.6;
     const speedCalc= speed * 3.6;
 

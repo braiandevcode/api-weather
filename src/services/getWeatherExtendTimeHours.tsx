@@ -1,10 +1,10 @@
 import { dataUrl } from '../constants';
 import convertWindSpeed from '../helpers/convertWindSpeed';
 import { kelvinToCelsius } from '../helpers/kelvin';
-import { IDeg, IForecastDay, IGetForecastWeather, IWeather, IWeatherMain, IWindSpeed } from '../types/types.d';
+import { IForecastDay, IGetWeather, IWeatherData, WeatherMain } from '../types/types.d';
 
 // CONSULTAR CLIMA
-const getWeatherDataExtend = async ({ latitude, longitude, setForecastWeather, setIsVisible }: IGetForecastWeather): Promise<void> => {
+const getWeatherDataExtend = async ({ latitude, longitude, setForecastWeather, setIsVisible }: Pick<IGetWeather, 'latitude' | 'longitude' | 'setForecastWeather' | 'setIsVisible'>): Promise<void> => {
     try {
         const { DOMAIN, EXTEND_WEEK } = dataUrl({ latitude, longitude });
         const URL = `${DOMAIN}${EXTEND_WEEK}`;
@@ -20,9 +20,9 @@ const getWeatherDataExtend = async ({ latitude, longitude, setForecastWeather, s
         // SI HAY RESULTADOS
         if (result && LIST.length > 0) {
             const forecastData = LIST.map((day:IForecastDay) => {     
-                const { deg, gust, speed }: IDeg & IWindSpeed = day.wind;
-                const { humidity, ...kelvinValues }: IWeatherMain = day.main;
-                const { description, icon, id}: IWeather = day.weather[0];
+                const { deg, gust, speed }:Pick<IWeatherData, 'deg' | 'gust' | 'speed'>= day.wind;
+                const { humidity, ...kelvinValues }:WeatherMain = day.main;
+                const { description, icon, id}: Pick<IWeatherData, 'description' | 'icon' | 'id'>= day.weather[0];
 
                 const { roundGust, roundAverage } = convertWindSpeed({ gust, speed });
                 const convertedTemperatures = kelvinToCelsius({ obj: kelvinValues });
@@ -30,7 +30,7 @@ const getWeatherDataExtend = async ({ latitude, longitude, setForecastWeather, s
 
                 return {
                     dt: day.dt,
-                    date: day.dt_txt, // Fecha del pronóstico
+                    date: day.dt_txt, 
                     temp,
                     temp_min,
                     temp_max,
@@ -39,7 +39,7 @@ const getWeatherDataExtend = async ({ latitude, longitude, setForecastWeather, s
                     deg,
                     gust: roundGust,
                     speed: roundAverage,
-                    name: result.city.name,
+                    name: null,
                     description,
                     id,
                     icon,

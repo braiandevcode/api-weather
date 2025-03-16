@@ -1,10 +1,10 @@
 import { dataUrl, dataUrlFilterSearch } from '../constants';
 import query from '../helpers/query';
-import { IGetWeatherFilterCity } from '../types/types.d';
+import { IGetWeather, IWeatherData } from '../types/types.d';
 import getWeatherData from './getWeatherData';
 import getWeatherDataExtend from './getWeatherExtendTimeHours';
 
-const changeLocation = async ({ latitude, longitude, name, setCurrentWeather, setButtonLoading, setLoading, setForecastWeather, setIsVisible }: IGetWeatherFilterCity) => {
+const changeLocation = async ({ latitude, name, longitude, setButtonLoading,  setLoading, setIsVisible, setForecastWeather, setCurrentWeather }: Omit<IGetWeather, 'stateCurrentWeather' | 'stateForecastWeather' | 'setCoordinates'> & Pick<IWeatherData, 'name'>) => {
     let URL: string;
 
     if (name) {
@@ -17,19 +17,21 @@ const changeLocation = async ({ latitude, longitude, name, setCurrentWeather, se
 
     const result = await query({url: URL, setLoading, setButtonLoading, setIsVisible});
 
-    console.log(result);
-    
-
     if (result) {
         // Si es una búsqueda por ciudad, extraemos las coordenadas
         if (name) {
-            const LAT = result[0]?.lat;
-            const LON = result[0]?.lon;
-            getWeatherData({ latitude: LAT, longitude: LON, setCurrentWeather, setLoading, setIsVisible, setButtonLoading });
-            getWeatherDataExtend({ latitude:LAT, longitude:LON, setForecastWeather, setIsVisible, setLoading, setButtonLoading});
+            const LAT:number = result[0]?.lat;
+            const LON:number = result[0]?.lon;
+            getWeatherData({ latitude: LAT, longitude: LON, setCurrentWeather, setIsVisible, setLoading, setButtonLoading});
+            getWeatherDataExtend({ 
+                latitude:LAT, 
+                longitude:LON, 
+                setIsVisible, 
+                setForecastWeather, 
+            });
         } else {
             // Si no es por ciudad, ya tenemos los datos directamente
-            getWeatherData({ latitude, longitude, setCurrentWeather, setLoading, setIsVisible, setButtonLoading });
+            getWeatherData({ latitude, longitude, setCurrentWeather, setIsVisible, setLoading, setButtonLoading });
         }
     }
 };
