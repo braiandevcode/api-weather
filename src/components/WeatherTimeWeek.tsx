@@ -20,9 +20,10 @@ export function WeatherTimeWeek() {
       dateHour: item.date,
       dateDate: item.date
     });
-    if (!dateItem) return;
+    
+    if (!dateItem) return <Loading />;
     const { dateNow, dateHour, dateDate } = dateItem;
-    return dateHour === DateHour.LIGTH_NIGTH && dateNow !== dateDate;
+    return dateHour === DateHour.LIGHT_NIGHT && dateNow !== dateDate;
   });
 
   return filterTimeWeek.length > 0 ? (

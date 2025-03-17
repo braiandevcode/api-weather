@@ -49,6 +49,7 @@ function App() {
         <Footer />
       </Stack>
     </Container>
+
   );
 }
 

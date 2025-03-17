@@ -8,13 +8,15 @@ const query = async ({ url, setLoading, setButtonLoading, setIsVisible }: Query)
         setIsVisible(false);
 
         const response = await fetch(url);
+
+        // Si la respuesta no es OK, lanza un error
         if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
 
         const res = await response.json();
 
         return res;
     } catch {
-        setIsVisible(true);
+        setLoading(false);
     } finally {
         setLoading(false);
         setButtonLoading(false);
@@ -22,3 +24,4 @@ const query = async ({ url, setLoading, setButtonLoading, setIsVisible }: Query)
 };
 
 export default query;
+

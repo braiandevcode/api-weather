@@ -17,11 +17,11 @@ export function DataHumFeels() {
         <Stack direction="horizontal" gap={3} className="text-secondary fs-5 fs-sm-6">
           <div>
             <Droplet className="text-primary me-1" /> 
-            <strong>{humidity}%</strong> Humidity
+            <strong>{humidity}%</strong> H
           </div>
           <div>
             <ThermometerHalf className="text-danger me-1" /> 
-            <strong>{feels_like.toFixed(1)}°C</strong> Thermal Sensing
+            <strong>{feels_like.toFixed(1)}°C</strong> S
           </div>
         </Stack>
       </Col>
@@ -37,11 +37,11 @@ export function DataHumFeelsExtend({ index, forecast }: { index: number; forecas
         <Stack direction="horizontal" gap={3} className="text-secondary fs-6">
           <div>
             <Droplet className="text-primary me-1" /> 
-            <strong>{forecast[index]?.humidity}%</strong> Humidity
+            <strong>{forecast[index]?.humidity}%</strong> H
           </div>
           <div>
             <ThermometerHalf className="text-danger me-1" /> 
-            <strong>{forecast[index]?.feels_like.toFixed(1)}°C</strong> Thermal Sensing
+            <strong>{forecast[index]?.feels_like.toFixed(1)}°C</strong> S
           </div>
         </Stack>
       </Col>

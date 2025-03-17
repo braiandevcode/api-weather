@@ -26,9 +26,9 @@ export function DataWind() {
           <ArrowRepeat size={20} className="text-primary" />
           <span>{existeDataWind({ data: DEG })}</span> - 
           <Wind size={20} className="text-warning" />
-          <span>{existeDataWind({ data: gust })} Km/h</span> - 
+          <span>{existeDataWind({ data: gust })} KM</span> - 
           <Speedometer size={20} className="text-success" />
-          <span>{existeDataWind({ data: speed })} Km/h</span>
+          <span>{existeDataWind({ data: speed })} KM</span>
         </Stack>
       </Col>
     </Row>
@@ -52,9 +52,9 @@ export function DataWindExtend({ index, forecast }: { index: number, forecast: I
           <ArrowRepeat size={20} className="text-primary" />
           <span>{existeDataWind({ data: DEG })}</span> - 
           <Wind size={20} className="text-warning" />
-          <span>{existeDataWind({ data: forecast[index]?.gust })} Km/h</span> - 
+          <span>{existeDataWind({ data: forecast[index]?.gust })} KM</span> - 
           <Speedometer size={20} className="text-success" />
-          <span>{existeDataWind({ data: forecast[index]?.speed })} Km/h</span>
+          <span>{existeDataWind({ data: forecast[index]?.speed })} KM</span>
         </Stack>
       </Col>
     </Row>

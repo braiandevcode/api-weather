@@ -1,6 +1,5 @@
 import { ChangeEvent, createContext, FormEvent } from 'react';
 import { ContextProviderProps, ContexSearch } from '../types/types.d';
-// import formatCoordinateCustom from '../helpers/formatCoordinates';
 import { useReducerSearch } from '../reducer/useReducerSearch';
 import { ERRORS_SEARCH_FORM } from '../constants';
 import { handleChangeGenerally } from '../helpers/handleChangeGenerally';

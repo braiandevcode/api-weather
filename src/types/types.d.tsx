@@ -150,7 +150,11 @@ export enum FieldsSearchForm {
 
 // ENUM DATE HOUR
 export enum DateHour {
-    LIGTH_NIGTH = '21:00:00',
+    NIGHT = '00:00:00',
+    MORNING = '06:00:00',
+    AFTERNOON = '12:00:00',
+    EVENING = '18:00:00', 
+    LIGHT_NIGHT = '21:00:00',
 }
 
 // ENUM CARDINALS
