@@ -7,7 +7,12 @@ const query = async ({ url, setLoading, setButtonLoading, setIsVisible }: Query)
         setButtonLoading(false);
         setIsVisible(false);
 
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            }
+        }
+        );
 
         // Si la respuesta no es OK, lanza un error
         if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
