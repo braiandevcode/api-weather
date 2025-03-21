@@ -12,7 +12,7 @@ export function ContentDataArticle({ index, forecast, time }: { index: number, f
             <Card className="bg-light text-body rounded-3 shadow-lg"> 
                 <Card.Header className="text-center fs-4 fw-bold">{time}</Card.Header> 
                 <Card.Body>
-                    <Stack gap={2}>
+                    <Stack direction='vertical' gap={2} className='align-items-center'>
                         <DataImageNameExtend index={index} forecast={forecast} />
                         <DataMinMaxExtend index={index} forecast={forecast} />
                         <DataWindExtend index={index} forecast={forecast} />

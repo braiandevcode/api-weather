@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ContextForecastWeather, DateHour, ITimeDate } from '../types/types.d';
+import { TypeContextForecastWeather, DateHour, ITimeDate } from '../types/types.d';
 import { ContextForecast } from '../context/ContextForecastWheather';
 import { forecastTime } from '../helpers/forecastTime';
 import { Loading } from './Loading';
@@ -9,7 +9,7 @@ import { CarrouselCards } from './CarrouselCards';
 
 // COMPONENTE SECCION SEMANAL
 export function WeatherTimeWeek() {
-  const contextForecast: ContextForecastWeather | null = useContext(ContextForecast);
+  const contextForecast: TypeContextForecastWeather | null = useContext(ContextForecast);
   if (!contextForecast) return <Loading />;
 
   const { stateForecastWeather } = contextForecast;

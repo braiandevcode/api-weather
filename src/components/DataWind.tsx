@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import cardinalPoints from '../helpers/cardinalPoints';
 import { ContextWeather } from '../context/ContextCurrentWeather';
 import { Col, Row, Stack } from 'react-bootstrap';
-import { ArrowRepeat, Wind, Speedometer } from 'react-bootstrap-icons';
+import { ArrowRepeat, Wind } from 'react-bootstrap-icons';
 import { Loading } from './Loading';
 import { IWeatherData } from '../types/types.d';
 
@@ -10,7 +10,7 @@ import { IWeatherData } from '../types/types.d';
 export function DataWind() {
   const context = useContext(ContextWeather);
   if (!context) return <Loading />;
-  const { deg, gust, speed } = context.stateCurrentWeather.currentWeather;
+  const { deg, gust } = context.stateCurrentWeather.currentWeather;
   const DEG = cardinalPoints(deg);
 
   const existeDataWind = ({ data }: { data: number | string }) => (
@@ -26,9 +26,7 @@ export function DataWind() {
           <ArrowRepeat size={20} className="text-primary" />
           <span>{existeDataWind({ data: DEG })}</span> - 
           <Wind size={20} className="text-warning" />
-          <span>{existeDataWind({ data: gust })} KM</span> - 
-          <Speedometer size={20} className="text-success" />
-          <span>{existeDataWind({ data: speed })} KM</span>
+          <span>{existeDataWind({ data: gust })} KM</span>
         </Stack>
       </Col>
     </Row>
@@ -52,9 +50,7 @@ export function DataWindExtend({ index, forecast }: { index: number, forecast: I
           <ArrowRepeat size={20} className="text-primary" />
           <span>{existeDataWind({ data: DEG })}</span> - 
           <Wind size={20} className="text-warning" />
-          <span>{existeDataWind({ data: forecast[index]?.gust })} KM</span> - 
-          <Speedometer size={20} className="text-success" />
-          <span>{existeDataWind({ data: forecast[index]?.speed })} KM</span>
+          <span>{existeDataWind({ data: forecast[index]?.gust })} KM</span>
         </Stack>
       </Col>
     </Row>

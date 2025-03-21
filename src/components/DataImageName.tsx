@@ -33,7 +33,7 @@ export function DataImageName() {
 // COMPONENTE NOMBRE DE CIUDAD E IMAGEN DE CLIMA EXTENDIDO
 export function DataImageNameExtend({ index, forecast }: { index: number, forecast: IWeatherData[] }) {
   return (
-    <Card.Text as={Row} className="justify-content-start">
+    <Card.Text as={Row} className="justify-content-center">
       <Col xs="auto">
         <Stack className="align-items-center" direction="horizontal" gap={2}>
           <IconWeatherExtend index={index} forecast={forecast} />

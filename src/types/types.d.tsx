@@ -173,15 +173,15 @@ export type Query = Pick<ISearchForm, 'url'> & Pick<IGetWeather, 'setLoading' | 
 
 // INTERFACE CONTEXT SEARCH FORM
 
-export type ContexSearch = ISearchForm & IHandleChangeSearch & Pick<IGetWeather, 'setButtonLoading'>;
+export type TypeContextSearch = ISearchForm & IHandleChangeSearch & Pick<IGetWeather, 'setButtonLoading'>;
 
 // INTERFACE CONTEXT WEATHER
-export type ContextCurrentWeather = Pick<IGetWeather, 'stateCurrentWeather' | 'setCoordinates' | 'setCurrentWeather' | 'setLoading'>;
+export type TypeContextCurrentWeather = Pick<IGetWeather, 'stateCurrentWeather' | 'setCoordinates' | 'setCurrentWeather' | 'setLoading'>;
 
 // INTERFACE KELVIN TO CELSIUS
 export type KelvinCelsius = Pick<IWeatherData, 'temp' | 'temp_max' | 'temp_min' | 'feels_like'>;
 
-export type ContextForecastWeather = Pick<IGetWeather, 'stateForecastWeather' | 'setForecastWeather'>;
+export type TypeContextForecastWeather = Pick<IGetWeather, 'stateForecastWeather' | 'setForecastWeather'>;
 
 // RECORD KELVIN
 export type KeyKelvin = Record<string, number>;

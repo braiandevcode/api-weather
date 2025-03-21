@@ -1,9 +1,9 @@
 import { createContext } from 'react';
-import { ContextProviderProps, ContextCurrentWeather } from '../types/types.d';
+import { ContextProviderProps, TypeContextCurrentWeather } from '../types/types.d';
 import { useReducerWeather } from '../reducer/useReducerWeather';
 
 // CONTEXTO
-export const ContextWeather = createContext<ContextCurrentWeather | null>(null);
+export const ContextWeather = createContext<TypeContextCurrentWeather | null>(null);
 
 // COMPONENTE PROVIDER
 export function ContextWeatherProvider({ children }: ContextProviderProps) {
@@ -16,7 +16,7 @@ export function ContextWeatherProvider({ children }: ContextProviderProps) {
     } = useReducerWeather();
 
     // OBJETO TIPO "IContextWeather"
-    const contextValue: ContextCurrentWeather = {
+    const contextValue: TypeContextCurrentWeather = {
         stateCurrentWeather:state,
         setCurrentWeather, 
         setCoordinates,

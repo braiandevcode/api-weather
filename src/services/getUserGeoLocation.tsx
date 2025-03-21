@@ -1,27 +1,47 @@
 import { GetLocationUser } from '../types/types.d';
 
-// OBTENER UBICACION DEL USUARIO
-const getUserLocation = ({ setCoordinates, setLoading }:GetLocationUser) => {
-
-    // FUNCION QUE LOCALIZA LA POSICION DEL USUARIO
+const getUserLocation = ({
+    setCoordinates,
+    setLoading,
+    onError, // ✅ Recibe la función para mostrar el error desde el padre
+}: GetLocationUser & { onError: (message: string) => void }) => {
     const getPosition = (pos: GeolocationPosition) => {
-        const { latitude, longitude } = pos.coords;    
-        setCoordinates({ latitude, longitude }); //MODIFICADOR DE ESTADO DE  COORDENADAS
+        const { latitude, longitude } = pos.coords;
+        setCoordinates({ latitude, longitude });
         setLoading(true);
     };
 
-    // FUNCION QUE EJECUTA EL MENSAJE DE ERROR EN LA GEOLOCALIZACIÓN
     const getError = (err: GeolocationPositionError) => {
         console.error('Error obteniendo la ubicación:', err);
         setLoading(false);
+
+        switch (err.code) {
+            case err.PERMISSION_DENIED:
+                onError(
+                    'Permiso de ubicación denegado. Habilítalo en la configuración del navegador para obtener tu ubicación.'
+                );
+                break;
+            case err.POSITION_UNAVAILABLE:
+                onError(
+                    'La geolocalización está desactivada o no disponible en tu dispositivo. Habilítala en la configuración del sistema para continuar.'
+                );
+                break;
+            case err.TIMEOUT:
+                onError(
+                    'No se pudo obtener la ubicación a tiempo. Intenta nuevamente.'
+                );
+                break;
+            default:
+                onError('Error desconocido al obtener la ubicación.');
+                break;
+        }
     };
 
-    // SI HAY UNA GEOLOCALIZACIÓN
     if (navigator.geolocation) {
         setLoading(true);
         navigator.geolocation.getCurrentPosition(getPosition, getError);
     } else {
-        console.error('La geolocalización no está disponible.');
+        onError('La geolocalización no está disponible en este navegador.');
         setLoading(false);
     }
 };

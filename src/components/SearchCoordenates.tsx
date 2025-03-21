@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { Col, FormControl, Stack } from 'react-bootstrap';
 import { ContextSearch } from '../context/ContextSearch';
-import { ContexSearch, ContextForecastWeather, ContextCurrentWeather} from '../types/types.d';
+import { TypeContextSearch, TypeContextForecastWeather, TypeContextCurrentWeather} from '../types/types.d';
 import { ContextWeather } from '../context/ContextCurrentWeather';
 import changeLocation from '../services/changeLocation';
 import { ContextForecast } from '../context/ContextForecastWheather';
@@ -10,9 +10,9 @@ import { Loading } from './Loading';
 // COMPONENTE BUSCADOR DE COORDENADAS
 export function SearchCoordenates() {
     // OBTENER VALOR DEL CONTEXTO
-    const contextWeather: ContextCurrentWeather | null = useContext(ContextWeather);
-    const contextSearch: ContexSearch | null = useContext(ContextSearch);
-    const contextForecast: ContextForecastWeather | null = useContext(ContextForecast);
+    const contextWeather: TypeContextCurrentWeather | null = useContext(ContextWeather);
+    const contextSearch: TypeContextSearch | null = useContext(ContextSearch);
+    const contextForecast: TypeContextForecastWeather | null = useContext(ContextForecast);
 
     if (!contextSearch || !contextWeather || !contextForecast) return <Loading />;
 

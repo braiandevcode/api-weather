@@ -16,7 +16,6 @@ export function CarrouselCards({ children }: ContextProviderProps) {
                keyBoardControl
                containerClass="carousel-container"
                itemClass="carousel-item-padding"
-               removeArrowOnDeviceType={['tablet', 'mobile']}
              >
               { children}
              </Carousel>

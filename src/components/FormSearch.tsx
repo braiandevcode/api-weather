@@ -10,7 +10,7 @@ export function FormSearch() {
   const contextSearch = useContext(ContextSearch);
   if (!contextSearch) return <Loading />;
 
-  const { handleSubmit, errors, location, latManual, longManual, isButtonLoading } = contextSearch;
+  const { handleSubmit, errors, location, latManual, longManual, isButtonLoading} = contextSearch;
 
   const isFieldEmpty = (value: string | undefined | null) => !value?.trim();
   const isAllValues: boolean = !isFieldEmpty(location) && !isFieldEmpty(latManual) && !isFieldEmpty(longManual);
@@ -23,7 +23,6 @@ export function FormSearch() {
     isAllValues ||
     isIncompleteCoordinates ||
     isAllEmptyFields;
-    
   return (
     <Form className="formSearch w-100" onSubmit={handleSubmit}>
       <Stack gap={4}>

@@ -1,11 +1,11 @@
 import { ChangeEvent, createContext, FormEvent } from 'react';
-import { ContextProviderProps, ContexSearch } from '../types/types.d';
+import { ContextProviderProps, TypeContextSearch } from '../types/types.d';
 import { useReducerSearch } from '../reducer/useReducerSearch';
 import { ERRORS_SEARCH_FORM } from '../constants';
 import { handleChangeGenerally } from '../helpers/handleChangeGenerally';
 
 // CONTEXTO
-export const ContextSearch = createContext<ContexSearch | null>(null);
+export const ContextSearch = createContext<TypeContextSearch | null>(null);
 
 // COMPONENTE PROVIDER
 export function ContextSearchProvider({ children }: ContextProviderProps) {
