@@ -21,7 +21,7 @@ function App() {
   return (
     <Container fluid className="p-4 z-0" style={{ maxWidth: '2024px', margin: '0 auto' }}>
       <Stack direction="vertical" gap={3} className='min-vh-100'>
-        <h1 className="text-white bg-primary rounded-4 text-center shadow fw-bold text-uppercase p-3 display-5">
+        <h1 className="text-white bg-gradient bg-primary bg-secondary rounded-2 text-center shadow text-uppercase p-3 display-5">
           Weather City
         </h1>
         <ContextSearchProvider>

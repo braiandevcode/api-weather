@@ -72,6 +72,15 @@ export interface IHandleChangeSearch {
     setField: (field: keyof ISearchForm, value: string | boolean) => void;
 }
 
+
+export interface IModalError{
+    title: string,
+    info: string,
+    handleClickModal: () => void,
+    isGeolocationError: boolean,
+    retryGeolocation: () => void
+}
+
 // INTERFACE TO PROVIDER
 export interface ContextProviderProps {
     children: ReactNode;

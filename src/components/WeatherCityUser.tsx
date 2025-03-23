@@ -99,7 +99,7 @@ export function WeatherCityUser() {
             {showModal && (
                 <ModalErrorSearch
                     handleClickModal={handleClickModal}
-                    title="Problema de ubicación de dispositivo"
+                    title="Sin ubicación"
                     info={modalMessage}
                     isGeolocationError={isGeolocationError} // Pasamos el estado del error de geolocalización
                     retryGeolocation={retryGeolocation} // Pasamos la función para reintentar
